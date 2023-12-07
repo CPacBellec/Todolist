@@ -1,0 +1,38 @@
+﻿@page "/tasks"
+
+<h3>Liste de tâches</h3>
+
+<ul>
+    @foreach (var (task, index) in tasks.Select((t, i) => (t, i)))
+    {
+        <li class="@((taskComplete[index]) ? "completed-task" : "")">
+            <input type="checkbox" @bind="taskComplete[index]" />
+            @task
+            <button @onclick="() => RemoveTask(index)">Supprimer</button>
+        </li>
+    }
+</ul>
+
+
+<input @bind="newTask" />
+<button @onclick="AddTask">Ajouter</button>
+
+@code {
+    List<string> tasks = new List<string>();
+    List<bool> taskComplete = new List<bool>();
+    string newTask = "";
+
+    void AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            tasks.Add(newTask);
+            taskComplete.Add(false);
+            newTask = "";
+        }
+    }
+    void RemoveTask(int index)
+    {
+        tasks.RemoveAt(index);
+    }
+}
